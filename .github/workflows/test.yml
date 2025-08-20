@@ -1,0 +1,101 @@
+name: Run tests
+
+on:
+  schedule:
+    - cron: "0 0 * * Sun"
+  pull_request:
+    branches: ["*"]
+    paths: ["**/*.go", "go.*", ".github/workflows/test.yml"]
+  push:
+    branches: ["*"]
+    tags-ignore: ["v*"]
+    paths: ["**/*.go", "go.*", ".github/workflows/test.yml"]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        arch:
+          - armv6
+          - armv7
+          - aarch64
+          - s390x
+          - 386
+          - x64
+        go:
+          - "1.23"
+          - "1.24"
+          - "1.25"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go }}
+          check-latest: true
+
+      - name: Configure environment
+        shell: bash
+        run: |
+          case "${{ matrix.arch }}" in
+          armv6)
+            echo GOARCH=arm >> $GITHUB_ENV
+            echo GOARM=6 >> $GITHUB_ENV
+            ;;
+          armv7)
+            echo GOARCH=arm >> $GITHUB_ENV
+            echo GOARM=7 >> $GITHUB_ENV
+            ;;
+          aarch64)
+            echo GOARCH=arm64 >> $GITHUB_ENV
+            ;;
+          s390x)
+            echo GOARCH=s390x >> $GITHUB_ENV
+            ;;
+          386)
+            echo GOARCH=386 >> $GITHUB_ENV
+            ;;
+          x64)
+            echo GOARCH=amd64 >> $GITHUB_ENV
+            ;;
+          *)
+            echo "Unknown architecture: ${{ matrix.arch }}"
+            exit 1
+            ;;
+          esac
+
+      - name: Check that Get is inlined
+        shell: bash
+        run: |
+          set -euo pipefail
+          go build -gcflags='-m' 2>&1 | grep 'can inline Get$' > /dev/null
+
+      - name: Build
+        run: go test -c -o gopc.test ./...
+
+      - if: matrix.arch == 'x64'
+        name: Build with race detector
+        run: go test -c -race -o gopc.race.test ./...
+
+      - if: matrix.arch == '386' || matrix.arch == 'x64'
+        name: Run tests
+        run: |
+          ./gopc.test -test.bench=. -test.benchmem -test.v
+          if [[ "${{ matrix.arch }}" != "386" ]]; then
+            ./gopc.race.test -test.v
+          fi
+
+      - if: matrix.arch != '386' && matrix.arch != 'x64'
+        name: Run tests
+        uses: uraimo/run-on-arch-action@v3
+        with:
+          arch: ${{ matrix.arch }}
+          distro: alpine_latest
+          dockerRunArgs: --mount type=bind,source="$(pwd)",target=/checkout,readonly
+          run: ./gopc.test -test.bench=. -test.benchmem -test.v
