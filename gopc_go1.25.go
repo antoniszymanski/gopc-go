@@ -5,9 +5,7 @@
 
 package gopc
 
-import (
-	"unsafe"
-)
+import "unsafe"
 
 func Get() uintptr {
 	if is32bit {
