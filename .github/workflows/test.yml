@@ -43,6 +43,7 @@ jobs:
       - name: Configure environment
         shell: bash
         run: |
+          set -euo pipefail
           case "${{ matrix.arch }}" in
           armv6)
             echo GOARCH=arm >> $GITHUB_ENV
@@ -77,15 +78,23 @@ jobs:
           go build -gcflags='-m' 2>&1 | grep 'can inline Get$' > /dev/null
 
       - name: Build
-        run: go test -c -o gopc.test ./...
+        shell: bash
+        run: |
+          set -euo pipefail
+          go test -c -o gopc.test ./...
 
       - if: matrix.arch == 'x64'
         name: Build with race detector
-        run: go test -c -race -o gopc.race.test ./...
+        shell: bash
+        run: |
+          set -euo pipefail
+          go test -c -race -o gopc.race.test ./...
 
       - if: matrix.arch == '386' || matrix.arch == 'x64'
         name: Run tests
+        shell: bash
         run: |
+          set -euo pipefail
           ./gopc.test -test.bench=. -test.benchmem -test.v
           if [[ "${{ matrix.arch }}" == "x64" ]]; then
             ./gopc.race.test -test.v
@@ -98,4 +107,6 @@ jobs:
           arch: ${{ matrix.arch }}
           distro: alpine_latest
           dockerRunArgs: --mount type=bind,source="$(pwd)",target=/checkout,readonly
-          run: ./gopc.test -test.bench=. -test.benchmem -test.v
+          run: |
+            set -euo pipefail
+            ./gopc.test -test.bench=. -test.benchmem -test.v
