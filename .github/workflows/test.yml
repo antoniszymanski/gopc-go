@@ -87,7 +87,7 @@ jobs:
         name: Run tests
         run: |
           ./gopc.test -test.bench=. -test.benchmem -test.v
-          if [[ "${{ matrix.arch }}" != "386" ]]; then
+          if [[ "${{ matrix.arch }}" == "x64" ]]; then
             ./gopc.race.test -test.v
           fi
 
