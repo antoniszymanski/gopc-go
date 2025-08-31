@@ -13,27 +13,27 @@ import (
 )
 
 func Test(t *testing.T) {
-	ch := make(chan string, 100)
-	for range cap(ch) {
+	errs := make(chan string, 100)
+	for range cap(errs) {
 		go func() {
 			pc := gopc.Get()
 			frame, ok := FrameForPC(pc)
 			switch {
 			case !ok:
-				ch <- "unable to get frame"
+				errs <- "unable to get frame"
 			case frame.Function != "github.com/antoniszymanski/gopc-go_test.Test":
-				ch <- "unexpected function: " + frame.Function
+				errs <- "unexpected function: " + frame.Function
 			case path.Base(frame.File) != "gopc_test.go":
-				ch <- "unexpected file: " + frame.File
+				errs <- "unexpected file: " + frame.File
 			case frame.Line != 18:
-				ch <- "unexpected line: " + strconv.Itoa(frame.Line)
+				errs <- "unexpected line: " + strconv.Itoa(frame.Line)
 			default:
-				ch <- ""
+				errs <- ""
 			}
 		}()
 	}
-	for range cap(ch) {
-		if err := <-ch; err != "" {
+	for range cap(errs) {
+		if err := <-errs; err != "" {
 			t.Fatal(err)
 		}
 	}
