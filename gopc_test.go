@@ -4,7 +4,7 @@
 package gopc_test
 
 import (
-	"path/filepath"
+	"path"
 	"runtime"
 	"strconv"
 	"testing"
@@ -23,7 +23,7 @@ func Test(t *testing.T) {
 				ch <- "unable to get frame"
 			case frame.Function != "github.com/antoniszymanski/gopc-go_test.Test":
 				ch <- "unexpected function: " + frame.Function
-			case filepath.Base(frame.File) != "gopc_test.go":
+			case path.Base(frame.File) != "gopc_test.go":
 				ch <- "unexpected file: " + frame.File
 			case frame.Line != 18:
 				ch <- "unexpected line: " + strconv.Itoa(frame.Line)
