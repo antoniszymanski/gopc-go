@@ -5,11 +5,11 @@ on:
     - cron: "0 0 * * Sun"
   pull_request:
     branches: ["*"]
-    paths: ["**/*.go", "go.*", ".github/workflows/test.yml"]
+    paths: ["**/*.go", "!gopc-offset-tool/**/*.go", "go.*", ".github/workflows/test.yml"]
   push:
     branches: ["*"]
     tags-ignore: ["v*"]
-    paths: ["**/*.go", "go.*", ".github/workflows/test.yml"]
+    paths: ["**/*.go", "!gopc-offset-tool/**/*.go", "go.*", ".github/workflows/test.yml"]
   workflow_dispatch:
 
 jobs:
