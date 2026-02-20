@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2025 Antoni Szymański
 // SPDX-License-Identifier: MPL-2.0
 
-//go:build gc && go1.25
+//go:build gc && go1.25 && !go1.26
 
 package gopc
 
