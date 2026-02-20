@@ -2,9 +2,6 @@
 // SPDX-License-Identifier: MPL-2.0
 
 //go:build (386 || amd64 || amd64p32 || arm || arm64 || s390x) && gc && go1.5
-// +build 386 amd64 amd64p32 arm arm64 s390x
-// +build gc
-// +build go1.5
 
 package gopc
 
