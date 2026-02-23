@@ -1,5 +1,5 @@
-github.com/antoniszymanski/loadpackage-go v0.1.4 h1:sanjYkGmjWMBUN9K/qsmg4EqjCvPpR7XPr//sgnwBfQ=
-github.com/antoniszymanski/loadpackage-go v0.1.4/go.mod h1:ZX6UKREvEjB98E3AEN/1e+mbtdmL/M9sQFgrXLypqcs=
+github.com/antoniszymanski/loadpackage-go v0.1.5 h1:L9eWzwbKWDb9wVjA5K1ewJnfDL4nPEN/DTwHWQzw9VI=
+github.com/antoniszymanski/loadpackage-go v0.1.5/go.mod h1:sovgVglR5zISDPFMZd96zFa9+vudCVbC8Yz3AKj4Tnk=
 github.com/google/go-cmp v0.6.0 h1:ofyhxvXcZhMsU5ulbFiLKl/XBFqE1GSq7atu8tAmTRI=
 github.com/google/go-cmp v0.6.0/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
 golang.org/x/mod v0.33.0 h1:tHFzIWbBifEmbwtGz65eaWyGiGZatSrT9prnU8DbVL8=
