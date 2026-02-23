@@ -3,7 +3,7 @@ module gopc-offset-tool
 go 1.24.6
 
 require (
-	github.com/antoniszymanski/loadpackage-go v0.1.4
+	github.com/antoniszymanski/loadpackage-go v0.1.5
 	golang.org/x/tools v0.42.0
 )
 
