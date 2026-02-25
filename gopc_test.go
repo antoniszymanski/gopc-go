@@ -13,7 +13,6 @@ import (
 )
 
 func Test(t *testing.T) {
-	t.Parallel()
 	errs := make(chan string, 100)
 	for range cap(errs) {
 		go func() {
