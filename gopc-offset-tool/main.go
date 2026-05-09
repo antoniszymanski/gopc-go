@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"go/types"
 	"os"
@@ -50,7 +51,7 @@ func getOffset() (Offset, error) {
 		}
 	}
 	if typ == nil {
-		return Offset{}, fmt.Errorf("failed to find the runtime.g struct")
+		return Offset{}, errors.New("failed to find the runtime.g struct")
 	}
 	fields := slices.Collect(typ.Fields())
 	for i, field := range fields {
@@ -62,7 +63,7 @@ func getOffset() (Offset, error) {
 			Arch64: types.SizesFor("gc", "amd64").Offsetsof(fields)[i],
 		}, nil
 	}
-	return Offset{}, fmt.Errorf("failed to find the gopc field in the runtime.g struct")
+	return Offset{}, errors.New("failed to find the gopc field in the runtime.g struct")
 }
 
 type Offset struct {
